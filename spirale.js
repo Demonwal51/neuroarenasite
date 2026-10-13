@@ -135,20 +135,28 @@ requestAnimationFrame(function () {
     }, 0);
 });
 
-/* Test de charge CPU : quatre Workers maximum, duree limitee a 2 min.
-   Le bouton reste sur le thread principal et peut interrompre la charge. */
+/* Cinq paliers de 24 secondes : deux minutes au total.
+   La fluidite mesuree est une estimation via requestAnimationFrame,
+   pas une mesure de l'utilisation CPU. */
 let stressWorkers = [];
 let stressTimer = null;
 let stressButton;
 let stressStatus;
+let stressResults;
+let stressFrame = null;
+let stressInterval = null;
+let stressRun = 0;
 
 function stopStress() {
-    stressWorkers.forEach(function (item) { item.terminate(); });
+    stressRun++;
+    stressWorkers.forEach(item => item.terminate());
     stressWorkers = [];
     clearTimeout(stressTimer);
+    clearInterval(stressInterval);
+    cancelAnimationFrame(stressFrame);
     stressTimer = null;
     if (stressStatus) stressStatus.textContent = "Test de charge arrêté.";
-    if (stressButton) stressButton.textContent = "Relancer la charge (2 min)";
+    if (stressButton) stressButton.textContent = "Relancer les 5 paliers";
 }
 
 function startStress() {
@@ -158,64 +166,102 @@ function startStress() {
         panel.style.marginBottom = "16px";
         stressButton = document.createElement("button");
         stressButton.type = "button";
-        stressButton.textContent = "Arrêter la charge";
         stressButton.style.cssText = "padding:10px;background:var(--accent);color:var(--fond);border:2px solid var(--bordure);cursor:pointer";
         stressStatus = document.createElement("p");
-        stressStatus.setAttribute("role", "status");
-        panel.append(stressButton, stressStatus);
-        // Le controle s'affiche avant le dessin.
+        // On evite une annonce a chaque seconde par les lecteurs d'ecran.
+        stressResults = document.createElement("ol");
+        panel.append(stressButton, stressStatus, stressResults);
         canvas.parentElement.insertBefore(panel, canvas);
         stressButton.addEventListener("click", function () {
             if (stressWorkers.length) stopStress();
             else if (!theme.checked) startStress();
         });
     }
-    const count = Math.min(4, Math.max(1, (navigator.hardwareConcurrency || 2) - 1));
-    stressStatus.textContent = "Charge CPU active : " + count + " calculs de fractales en parallèle pendant 2 minutes.";
-    stressButton.textContent = "Arrêter la charge";
-    const code = `
+    stressResults.replaceChildren();
+    stressButton.textContent = "Arrêter le test de charge";
+    const run = stressRun;
+    const maximum = Math.min(16, Math.max(1, (navigator.hardwareConcurrency || 4) - 1));
+    const targets = [1, 2, 4, 8, 16];
+    let stage = 0;
+    const workerCode = `
         onmessage = function () {
-            const deadline = performance.now() + 120000;
+            const deadline = performance.now() + 24000;
             let checksum = 0;
-            // Mandelbrot : iterations complexes pour chaque point.
             while (performance.now() < deadline) {
                 for (let y = 0; y < 256; y++) {
                     const cy = y / 128 - 1;
                     for (let x = 0; x < 256; x++) {
                         const cx = x / 85 - 2;
-                        let zx = 0, zy = 0, iteration = 0;
-                        while (zx*zx + zy*zy < 4 && iteration < 1200) {
-                            const nextX = zx*zx - zy*zy + cx;
-                            zy = 2*zx*zy + cy;
-                            zx = nextX;
-                            iteration++;
+                        let zx = 0, zy = 0, n = 0;
+                        while (zx*zx + zy*zy < 4 && n < 1800) {
+                            const next = zx*zx - zy*zy + cx;
+                            zy = 2*zx*zy + cy; zx = next; n++;
                         }
-                        checksum += iteration;
+                        checksum += n;
                     }
                     if (performance.now() >= deadline) break;
                 }
             }
-            postMessage({checksum});
-            close();
+            postMessage(checksum); close();
         };
     `;
-    const url = URL.createObjectURL(new Blob([code], {type:"text/javascript"}));
-    try {
-        for (let i = 0; i < count; i++) {
-            const item = new Worker(url);
-            stressWorkers.push(item);
-            item.postMessage("start");
+    function launchStage() {
+        if (run !== stressRun || theme.checked || document.hidden) return;
+        stressWorkers.forEach(item => item.terminate());
+        stressWorkers = [];
+        clearInterval(stressInterval);
+        cancelAnimationFrame(stressFrame);
+        const count = Math.min(targets[stage], maximum);
+        let frames = 0, previous = null, longest = 0;
+        const started = performance.now();
+        function frame(now) {
+            if (run !== stressRun) return;
+            if (previous !== null) longest = Math.max(longest, now - previous);
+            previous = now; frames++;
+            stressFrame = requestAnimationFrame(frame);
         }
-    } catch (error) {
-        stopStress();
-        stressStatus.textContent = "Test de charge indisponible.";
-    } finally {
-        URL.revokeObjectURL(url);
+        stressFrame = requestAnimationFrame(frame);
+        function status() {
+            const elapsed = (performance.now() - started) / 1000;
+            const fps = elapsed ? Math.round(frames / elapsed) : 0;
+            stressStatus.textContent = "Palier " + (stage + 1) + "/5 · " + count
+                + " calculs simultanés · " + Math.max(0, Math.ceil(24 - elapsed))
+                + " s restantes · fluidité estimée : " + fps
+                + " images/s · plus long intervalle : " + Math.round(longest) + " ms";
+        }
+        status();
+        stressInterval = setInterval(status, 1000);
+        const url = URL.createObjectURL(new Blob([workerCode], { type: "text/javascript" }));
+        try {
+            for (let i = 0; i < count; i++) {
+                const item = new Worker(url);
+                stressWorkers.push(item);
+                item.postMessage("start");
+            }
+        } catch (error) {
+            stopStress();
+            stressStatus.textContent = "Test indisponible dans ce navigateur.";
+            return;
+        } finally { URL.revokeObjectURL(url); }
+        stressTimer = setTimeout(function () {
+            if (run !== stressRun) return;
+            const seconds = (performance.now() - started) / 1000;
+            const line = document.createElement("li");
+            line.textContent = "Palier " + (stage + 1) + " : " + count
+                + " calculs, environ " + Math.round(frames / seconds)
+                + " images/s, intervalle maximum " + Math.round(longest) + " ms.";
+            stressResults.append(line);
+            stage++;
+            if (stage < 5) launchStage();
+            else {
+                stopStress();
+                stressStatus.textContent = "Les cinq paliers sont terminés. Compare les résultats ci-dessous.";
+            }
+        }, 24000);
     }
-    stressTimer = setTimeout(stopStress, 120000);
+    launchStage();
 }
-// Interrompt la charge quand l'onglet passe en arriere-plan.
- document.addEventListener("visibilitychange", function () {
+document.addEventListener("visibilitychange", function () {
     if (document.hidden) stopStress();
 });
 window.addEventListener("pagehide", stopStress);
