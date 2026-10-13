@@ -29,7 +29,11 @@ La case est hors du formulaire : le bouton reset du quiz ne change pas le thème
     
         <!-- Image locale : src = chemin, alt = description, width/height = dimensions.
 Le CSS affiche logo.png à la place en thème Neo. Les deux fichiers restent conservés. -->
+<!-- Le navigateur calcule phi ; aucune valeur numerique n'est inscrite ici. -->
+<div class="logo-et-phi">
 <img src="logo-space-marine.png" alt="Logo de NeuroArena" width="200" height="200">
+<div class="nombre-or"><b>Nombre d’or</b><br>φ ≈ <output class="valeur-phi">Calcul en cours…</output><br><small>φ = (1 + √5) / 2</small><noscript><br>Active JavaScript pour effectuer le calcul.</noscript></div>
+</div>
         <p><b><!-- Nom visible en thème Space Marine, caché en thème Neo par le CSS. -->
 <span class="name-space">NeuroArena</span><!-- Nom visible seulement en thème Neo grâce au CSS. -->
 <span class="name-neo">Neo NeuroArena</span></b></p>
@@ -45,7 +49,11 @@ Le CSS affiche logo.png à la place en thème Neo. Les deux fichiers restent con
 <a href="#principe">Commencer la découverte ↓</a><br>
         <!-- Image locale : src = chemin, alt = description, width/height = dimensions.
 Le CSS affiche logo.png à la place en thème Neo. Les deux fichiers restent conservés. -->
-<img src="logo-space-marine.png" alt="Logo de NeuroArena" width="200" height="200"><br>
+<!-- Le navigateur calcule phi ; aucune valeur numerique n'est inscrite ici. -->
+<div class="logo-et-phi">
+<img src="logo-space-marine.png" alt="Logo de NeuroArena" width="200" height="200">
+<div class="nombre-or"><b>Nombre d’or</b><br>φ ≈ <output class="valeur-phi">Calcul en cours…</output><br><small>φ = (1 + √5) / 2</small><noscript><br>Active JavaScript pour effectuer le calcul.</noscript></div>
+</div><br>
         <!-- NAVIGATION : chaque #nom doit correspondre exactement à un id plus bas. -->
 <a href="#principe">01 comprendre</a>
         <a href="#apprendre">02 apprendre</a>
@@ -228,8 +236,20 @@ Aucune réponse n’est cochée au départ : le bouton les décoche toutes, sans
 <button type="reset">Recommencer le quiz ↺</button>
             </form>
         </section>
-    </body>
+    <!-- Math.sqrt(5) calcule la racine carree de 5 dans le navigateur.
+     Le resultat est arrondi a 10 decimales uniquement pour l'affichage. -->
+<script>
+    const nombreOr = (1 + Math.sqrt(5)) / 2;
+    document.querySelectorAll(".valeur-phi").forEach(function (element) {
+        element.textContent = nombreOr.toLocaleString("fr-FR", {
+            minimumFractionDigits: 10,
+            maximumFractionDigits: 10
+        });
+    });
+</script>
+</body>
 </html>
+
 
 
 

@@ -345,3 +345,31 @@ input:focus-visible {
         scroll-behavior: auto;
     }
 }
+
+/* Logo et nombre d'or cote a cote, avec retour a la ligne si necessaire. */
+.logo-et-phi {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 24px;
+    margin: 20px 0;
+}
+.logo-et-phi img {
+    width: 200px;
+    max-width: 100%;
+    height: auto;
+}
+.nombre-or {
+    color: var(--texte);
+    padding: 14px;
+    border: 2px solid var(--accent);
+    overflow-wrap: anywhere;
+}
+.valeur-phi {
+    color: var(--accent);
+    font-size: 22px;
+}
+@media (max-width: 650px) {
+    .logo-et-phi img { width: 150px; }
+}
+
