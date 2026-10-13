@@ -9,6 +9,7 @@ let worker = null;
 let generation = 0;
 
 function stopCalculation() {
+    stopStress();
     generation++;
     if (worker) { worker.terminate(); worker = null; }
     statusText.textContent = "Calcul et tracé désactivés — reviens à NeuroArena pour relancer.";
@@ -17,6 +18,7 @@ function stopCalculation() {
 }
 
 function startCalculation() {
+    startStress();
     if (worker) worker.terminate();
     const thisRun = ++generation;
     statusText.textContent = "Calcul de 30 000 décimales…";
@@ -132,3 +134,88 @@ requestAnimationFrame(function () {
         if (!theme.checked) startCalculation(); else stopCalculation();
     }, 0);
 });
+
+/* Test de charge CPU : quatre Workers maximum, duree limitee a 15 s.
+   Le bouton reste sur le thread principal et peut interrompre la charge. */
+let stressWorkers = [];
+let stressTimer = null;
+let stressButton;
+let stressStatus;
+
+function stopStress() {
+    stressWorkers.forEach(function (item) { item.terminate(); });
+    stressWorkers = [];
+    clearTimeout(stressTimer);
+    stressTimer = null;
+    if (stressStatus) stressStatus.textContent = "Test de charge arrêté.";
+    if (stressButton) stressButton.textContent = "Relancer la charge (15 s)";
+}
+
+function startStress() {
+    stopStress();
+    if (!stressButton) {
+        const panel = document.createElement("div");
+        panel.style.marginBottom = "16px";
+        stressButton = document.createElement("button");
+        stressButton.type = "button";
+        stressButton.textContent = "Arrêter la charge";
+        stressButton.style.cssText = "padding:10px;background:var(--accent);color:var(--fond);border:2px solid var(--bordure);cursor:pointer";
+        stressStatus = document.createElement("p");
+        stressStatus.setAttribute("role", "status");
+        panel.append(stressButton, stressStatus);
+        // Le controle s'affiche avant le dessin.
+        canvas.parentElement.insertBefore(panel, canvas);
+        stressButton.addEventListener("click", function () {
+            if (stressWorkers.length) stopStress();
+            else if (!theme.checked) startStress();
+        });
+    }
+    const count = Math.min(4, Math.max(1, (navigator.hardwareConcurrency || 2) - 1));
+    stressStatus.textContent = "Charge CPU active : " + count + " calculs de fractales en parallèle pendant 15 secondes.";
+    stressButton.textContent = "Arrêter la charge";
+    const code = `
+        onmessage = function () {
+            const deadline = performance.now() + 15000;
+            let checksum = 0;
+            // Mandelbrot : iterations complexes pour chaque point.
+            while (performance.now() < deadline) {
+                for (let y = 0; y < 256; y++) {
+                    const cy = y / 128 - 1;
+                    for (let x = 0; x < 256; x++) {
+                        const cx = x / 85 - 2;
+                        let zx = 0, zy = 0, iteration = 0;
+                        while (zx*zx + zy*zy < 4 && iteration < 1200) {
+                            const nextX = zx*zx - zy*zy + cx;
+                            zy = 2*zx*zy + cy;
+                            zx = nextX;
+                            iteration++;
+                        }
+                        checksum += iteration;
+                    }
+                    if (performance.now() >= deadline) break;
+                }
+            }
+            postMessage({checksum});
+            close();
+        };
+    `;
+    const url = URL.createObjectURL(new Blob([code], {type:"text/javascript"}));
+    try {
+        for (let i = 0; i < count; i++) {
+            const item = new Worker(url);
+            stressWorkers.push(item);
+            item.postMessage("start");
+        }
+    } catch (error) {
+        stopStress();
+        stressStatus.textContent = "Test de charge indisponible.";
+    } finally {
+        URL.revokeObjectURL(url);
+    }
+    stressTimer = setTimeout(stopStress, 15000);
+}
+// Interrompt la charge quand l'onglet passe en arriere-plan.
+ document.addEventListener("visibilitychange", function () {
+    if (document.hidden) stopStress();
+});
+window.addEventListener("pagehide", stopStress);
