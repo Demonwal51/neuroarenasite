@@ -32,30 +32,8 @@ La case est hors du formulaire : le bouton reset du quiz ne change pas le thème
         <!-- Image locale : src = chemin, alt = description, width/height = dimensions.
 Le CSS affiche logo.png à la place en thème Neo. Les deux fichiers restent conservés. -->
 
-<!-- Le bouton de theme est deja situe au-dessus de cette zone.
-     Le canvas est dessine par spirale.js, execute dans le navigateur. -->
-<div class="logo-et-phi">
-    <img src="logo-space-marine.png" alt="Logo de NeuroArena" width="200" height="200">
-    <section class="visualisation-or" aria-label="Spirale du nombre d’or">
-        <h3>La spirale du nombre d’or</h3>
-        <p id="etat-calcul" role="status">Prêt à calculer après l’affichage du bouton.</p>
-        <canvas id="spirale-or" width="700" height="490" role="img" aria-label="Spirale logarithmique dorée calculée dans le navigateur"></canvas>
-        <p>Son rayon est multiplié par φ à chaque quart de tour.</p>
-        <details><summary>Voir les 1 000 000 décimales calculées</summary>
-            <pre id="decimales-or"></pre>
-        </details>
-        <noscript>Active JavaScript pour calculer et dessiner la spirale.</noscript>
-    </section>
-</div>
-        <!-- Cercle calculé dans le navigateur avec pi à un million de décimales. -->
-<section class="visualisation-or" aria-label="Cercle calculé avec pi">
-    <h3>Un cercle avec π</h3>
-    <button type="button" id="arreter-pi">Arrêter π et le cercle</button>
-    <button type="button" id="relancer-pi">Relancer π et le cercle</button>
-    <p id="etat-pi" role="status">Prêt à calculer π.</p>
-    <canvas id="cercle-pi" width="700" height="525" role="img" aria-label="Cercle tracé progressivement à partir de pi calculé"></canvas>
-    <details><summary>Voir le million de décimales de π</summary><pre id="decimales-pi"></pre></details>
-</section>
+<img src="logo-space-marine.png" alt="Logo de NeuroArena" width="200" height="200">
+        
 <p><b><!-- Nom visible en thème Space Marine, caché en thème Neo par le CSS. -->
 <span class="name-space">NeuroArena</span><!-- Nom visible seulement en thème Neo grâce au CSS. -->
 <span class="name-neo">Neo NeuroArena</span></b></p>
@@ -256,12 +234,12 @@ Aucune réponse n’est cochée au départ : le bouton les décoche toutes, sans
             </form>
         </section>
     
-<!-- defer attend que le HTML soit lu avant de lancer le script. -->
 
 
 
-<script src="spirale.js" defer></script>
-<script src="cercle.js" defer></script>
+
+
+
 </body>
 </html>
 
