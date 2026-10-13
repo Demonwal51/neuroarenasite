@@ -380,3 +380,8 @@ input:focus-visible {
 #etat-calcul { font-size: 14px; }
 #decimales-or { max-height: 180px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 12px; }
 summary { cursor: pointer; color: var(--accent); }
+
+/* Le cercle suit la palette et la largeur disponible. */
+#cercle-pi { display:block; width:100%; height:auto; }
+#decimales-pi { max-height:180px; overflow:auto; white-space:pre-wrap; overflow-wrap:anywhere; font-size:12px; }
+#arreter-pi, #relancer-pi { padding:10px; margin:5px; background:var(--accent); color:var(--fond); border:2px solid var(--bordure); cursor:pointer; }
