@@ -1,0 +1,238 @@
+<!-- HTML5. Les commentaires expliquent le code sans apparaître sur la page. -->
+<!DOCTYPE html>
+<!-- lang="fr" indique la langue du document aux navigateurs et lecteurs d’écran. -->
+<html lang="fr">
+    <!-- HEAD : réglages du document. BODY contient les éléments affichés. -->
+<head>
+        <!-- UTF-8 permet de lire les accents et les symboles. -->
+<meta charset="UTF-8">
+        <!-- Adapte la largeur de la page à celle de l’écran, notamment sur téléphone. -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Charge style.css dans le même dossier : couleurs, espacements et thèmes. -->
+<link rel="stylesheet" href="style.css">
+        <!-- Titre de l’onglet. Il reste fixe : le CSS change les noms affichés dans la page. -->
+<title>NeuroArena</title>
+    </head>
+    <body>
+        <!-- THÈME : cette case active Neo NeuroArena une fois cochée.
+Le CSS utilise :has() et :checked. L’id neo-theme doit être unique.
+La case est hors du formulaire : le bouton reset du quiz ne change pas le thème. -->
+<input class="neo-toggle" type="checkbox" id="neo-theme">
+
+    <!-- Le label sert de bouton. for="neo-theme" le relie à la case ayant cet id. -->
+<label class="neo-button" for="neo-theme">
+        <!-- Nom visible en thème Space Marine, caché en thème Neo par le CSS. -->
+<span class="name-space">NeuroArena</span>
+        <!-- Nom visible seulement en thème Neo grâce au CSS. -->
+<span class="name-neo">Neo NeuroArena</span>
+    </label>
+    
+        <!-- Image locale : src = chemin, alt = description, width/height = dimensions.
+Le CSS affiche logo.png à la place en thème Neo. Les deux fichiers restent conservés. -->
+<img src="logo-space-marine.png" alt="Logo de NeuroArena" width="200" height="200">
+        <p><b><!-- Nom visible en thème Space Marine, caché en thème Neo par le CSS. -->
+<span class="name-space">NeuroArena</span><!-- Nom visible seulement en thème Neo grâce au CSS. -->
+<span class="name-neo">Neo NeuroArena</span></b></p>
+        <p>COMPRENDRE L’INTELLIGENCE ARTIFICIELLE</p>
+        <!-- Titre principal unique. Les br placent les trois phrases sur des lignes différentes. -->
+<h1>
+            Des exemples.<br>
+            Un modèle.<br>
+            Un apprentissage.
+        </h1>
+        <p>Comment une machine apprend-elle à reconnaître une image ou à prévoir un résultat ? Découvre les bases du machine learning, étape par étape.</p>
+        <!-- Ancre : #principe mène à l’élément ayant id="principe", sans JavaScript. -->
+<a href="#principe">Commencer la découverte ↓</a><br>
+        <!-- Image locale : src = chemin, alt = description, width/height = dimensions.
+Le CSS affiche logo.png à la place en thème Neo. Les deux fichiers restent conservés. -->
+<img src="logo-space-marine.png" alt="Logo de NeuroArena" width="200" height="200"><br>
+        <!-- NAVIGATION : chaque #nom doit correspondre exactement à un id plus bas. -->
+<a href="#principe">01 comprendre</a>
+        <a href="#apprendre">02 apprendre</a>
+        <a href="#explorer">03 explorer</a>
+        <a href="#test">04 se tester</a>
+        <p>01 COMPRENDRE</p>
+        <!-- SECTION 1 : définition. h2 = titre de section, h3 = sous-titre, p = paragraphe. -->
+<section id="principe">
+            <h2>Le machine learning, c’est quoi ?</h2>
+            <p>Le machine learning, ou apprentissage automatique, est une branche de l’intelligence artificielle. On entraîne un modèle sur des données pour qu’il repère des régularités et produise des prédictions.</p>
+            <p>Dans un programme classique, on écrit des règles. Avec le machine learning, un algorithme ajuste les paramètres du modèle à partir d’exemples. Le modèle peut ensuite traiter de nouveaux cas.</p>
+            <h3>Un exemple : détecter les spams</h3>
+            <p>On fournit des e-mails étiquetés « spam » ou « non-spam ». Le modèle apprend des associations entre leurs caractéristiques et ces catégories.</p>
+            <p>Pour un nouvel e-mail, il prédit une catégorie. Il peut se tromper : une prédiction n’est pas une certitude.</p>
+            <p>E-MAILS → MODÈLE → PRÉDICTION</p>
+        </section>
+        <p>02 L’APPRENTISSAGE</p>
+        <!-- SECTION 2 : étapes. Le CSS associe chaque h3 au p suivant avec h3 + p. -->
+<section id="apprendre">
+            <h2>De la donnée au résultat.</h2>
+            <p>Quatre grandes étapes pour construire et utiliser un modèle.</p>
+            <p>ÉTAPE 01</p>
+            <h3>Préparer les données</h3>
+            <p>Collecter des exemples pertinents, corriger les erreurs et réserver des données pour la validation et le test.</p>
+            <p>ÉTAPE 02</p>
+            <h3>Entraîner le modèle</h3>
+            <p>Le modèle produit des réponses sur les exemples d’entraînement. L’algorithme ajuste ses paramètres pour réduire les erreurs.</p>
+            <p>ÉTAPE 03</p>
+            <h3>Évaluer sur de nouveaux cas</h3>
+            <p>La validation aide à choisir les réglages. Un jeu de test séparé permet ensuite d’évaluer la capacité à généraliser.</p>
+            <p>ÉTAPE 04</p>
+            <h3>Utiliser et surveiller</h3>
+            <p>Le modèle fait des prédictions sur de nouvelles données. On surveille ses performances, car les situations peuvent évoluer.</p>
+        </section>
+        <p>03 LES MÉTHODES</p>
+        <!-- SECTION 3 : méthodes d’apprentissage. small présente un texte complémentaire. -->
+<section id="explorer">
+            <h2>Trois façons d’apprendre.</h2>
+            <h3>Supervisé</h3>
+            <p>Chaque exemple est accompagné de la réponse attendue. Le modèle apprend à prédire une catégorie ou une valeur.</p>
+            <!-- Texte complémentaire : le navigateur le présente par défaut en plus petit. -->
+<small>Exemple : détecter les spams.</small>
+            <h3>Non supervisé</h3>
+            <p>Les données n’ont pas de réponse attendue. On cherche des structures ou des groupes similaires.</p>
+            <!-- Texte complémentaire : le navigateur le présente par défaut en plus petit. -->
+<small>Exemple : regrouper des documents.</small>
+            <h3>Par renforcement</h3>
+            <p>Un agent effectue des actions et reçoit des récompenses. Il apprend une stratégie pour améliorer ses résultats.</p>
+            <!-- Texte complémentaire : le navigateur le présente par défaut en plus petit. -->
+<small>Exemple : jouer dans un simulateur.</small>
+            <p><b>Les limites à connaître.</b> Des données biaisées peuvent entraîner des résultats biaisés. Un modèle peut aussi trop mémoriser ses exemples : c’est le <b>surapprentissage</b>. Réussir sur les données d’entraînement ne garantit pas de réussir sur des données nouvelles.</p>
+        </section>
+        <p>04 SE TESTER</p>
+        <!-- SECTION 4 : quiz. Toutes les réponses et le bouton reset sont dans le même form. -->
+<section id="test">
+            <h2>Entre dans l’arène.</h2>
+            <p>Trois questions pour vérifier tes connaissances. Choisis une réponse pour afficher l’explication.</p>
+            <!-- Le formulaire regroupe les champs. Il ne calcule pas de score et n’envoie rien ici. -->
+<form id="quiz">
+                <p>QUESTION 01 / 03</p>
+                <h3>Sur quoi repose l’apprentissage d’un modèle ?</h3>
+                <!-- Un bloc choice par réponse : input, label, puis explication.
+Cet ordre permet au CSS input:checked ~ .answer de montrer l’explication choisie. -->
+<div class="choice">
+                    <!-- radio = un choix unique. Même name pour une question, id unique pour chaque réponse. -->
+<input type="radio" name="question1" id="question1-reponse1">
+                    <!-- for correspond à l’id du bouton radio. Cliquer sur le texte coche la réponse. -->
+<label for="question1-reponse1">
+                        Sur des données qui permettent d’ajuster ses paramètres.
+                    </label>
+                    <!-- Explication cachée par le CSS jusqu’à la sélection de cette réponse. -->
+<div class="answer">
+                        ✓ Exact ! Le modèle est entraîné à partir d’exemples.
+                    </div>
+                </div>
+                <!-- Un bloc choice par réponse : input, label, puis explication.
+Cet ordre permet au CSS input:checked ~ .answer de montrer l’explication choisie. -->
+<div class="choice">
+                    <!-- radio = un choix unique. Même name pour une question, id unique pour chaque réponse. -->
+<input type="radio" name="question1" id="question1-reponse2">
+                    <!-- for correspond à l’id du bouton radio. Cliquer sur le texte coche la réponse. -->
+<label for="question1-reponse2">
+                        Sur une compréhension identique à celle d’un humain.
+                    </label>
+                    <!-- Explication cachée par le CSS jusqu’à la sélection de cette réponse. -->
+<div class="answer">
+                        Repérer des régularités ne signifie pas comprendre comme un humain.
+                    </div>
+                </div>
+                <!-- Un bloc choice par réponse : input, label, puis explication.
+Cet ordre permet au CSS input:checked ~ .answer de montrer l’explication choisie. -->
+<div class="choice">
+                    <!-- radio = un choix unique. Même name pour une question, id unique pour chaque réponse. -->
+<input type="radio" name="question1" id="question1-reponse3">
+                    <!-- for correspond à l’id du bouton radio. Cliquer sur le texte coche la réponse. -->
+<label for="question1-reponse3">
+                        Sur des réponses choisies uniquement au hasard.
+                    </label>
+                    <!-- Explication cachée par le CSS jusqu’à la sélection de cette réponse. -->
+<div class="answer">
+                        L’entraînement ajuste le modèle pour améliorer ses résultats.
+                    </div>
+                </div>
+                <p>QUESTION 02 / 03</p>
+                <h3>Pourquoi conserver un jeu de test séparé ?</h3>
+                <!-- Un bloc choice par réponse : input, label, puis explication.
+Cet ordre permet au CSS input:checked ~ .answer de montrer l’explication choisie. -->
+<div class="choice">
+                    <!-- radio = un choix unique. Même name pour une question, id unique pour chaque réponse. -->
+<input type="radio" name="question2" id="question2-reponse1">
+                    <!-- for correspond à l’id du bouton radio. Cliquer sur le texte coche la réponse. -->
+<label for="question2-reponse1">
+                        Pour faire mémoriser les réponses du test.
+                    </label>
+                    <!-- Explication cachée par le CSS jusqu’à la sélection de cette réponse. -->
+<div class="answer">
+                        Le test doit rester séparé de l’entraînement pour évaluer de nouveaux cas.
+                    </div>
+                </div>
+                <!-- Un bloc choice par réponse : input, label, puis explication.
+Cet ordre permet au CSS input:checked ~ .answer de montrer l’explication choisie. -->
+<div class="choice">
+                    <!-- radio = un choix unique. Même name pour une question, id unique pour chaque réponse. -->
+<input type="radio" name="question2" id="question2-reponse2">
+                    <!-- for correspond à l’id du bouton radio. Cliquer sur le texte coche la réponse. -->
+<label for="question2-reponse2">
+                        Pour évaluer le modèle sur des exemples nouveaux.
+                    </label>
+                    <!-- Explication cachée par le CSS jusqu’à la sélection de cette réponse. -->
+<div class="answer">
+                        ✓ Exact ! Cela permet de mesurer sa capacité à généraliser.
+                    </div>
+                </div>
+                <p>QUESTION 03 / 03</p>
+                <h3>Des e-mails étiquetés « spam » ou « non-spam » correspondent à…</h3>
+                <!-- Un bloc choice par réponse : input, label, puis explication.
+Cet ordre permet au CSS input:checked ~ .answer de montrer l’explication choisie. -->
+<div class="choice">
+                    <!-- radio = un choix unique. Même name pour une question, id unique pour chaque réponse. -->
+<input type="radio" name="question3" id="question3-reponse1">
+                    <!-- for correspond à l’id du bouton radio. Cliquer sur le texte coche la réponse. -->
+<label for="question3-reponse1">
+                        L’apprentissage par renforcement.
+                    </label>
+                    <!-- Explication cachée par le CSS jusqu’à la sélection de cette réponse. -->
+<div class="answer">
+                        Le renforcement repose sur des actions et des récompenses.
+                    </div>
+                </div>
+                <!-- Un bloc choice par réponse : input, label, puis explication.
+Cet ordre permet au CSS input:checked ~ .answer de montrer l’explication choisie. -->
+<div class="choice">
+                    <!-- radio = un choix unique. Même name pour une question, id unique pour chaque réponse. -->
+<input type="radio" name="question3" id="question3-reponse2">
+                    <!-- for correspond à l’id du bouton radio. Cliquer sur le texte coche la réponse. -->
+<label for="question3-reponse2">
+                        L’apprentissage non supervisé.
+                    </label>
+                    <!-- Explication cachée par le CSS jusqu’à la sélection de cette réponse. -->
+<div class="answer">
+                        Ici, chaque exemple est accompagné d’une réponse attendue.
+                    </div>
+                </div>
+                <!-- Un bloc choice par réponse : input, label, puis explication.
+Cet ordre permet au CSS input:checked ~ .answer de montrer l’explication choisie. -->
+<div class="choice">
+                    <!-- radio = un choix unique. Même name pour une question, id unique pour chaque réponse. -->
+<input type="radio" name="question3" id="question3-reponse3">
+                    <!-- for correspond à l’id du bouton radio. Cliquer sur le texte coche la réponse. -->
+<label for="question3-reponse3">
+                        L’apprentissage supervisé.
+                    </label>
+                    <!-- Explication cachée par le CSS jusqu’à la sélection de cette réponse. -->
+<div class="answer">
+                        ✓ Exact ! Les données sont étiquetées avec les bonnes réponses.
+                    </div>
+                </div>
+                <!-- reset remet les champs du formulaire à leur état initial.
+Aucune réponse n’est cochée au départ : le bouton les décoche toutes, sans JavaScript. -->
+<button type="reset">Recommencer le quiz ↺</button>
+            </form>
+        </section>
+    </body>
+</html>
+
+
+
+
+
+

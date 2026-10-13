@@ -1,0 +1,347 @@
+/* =====================================================================
+   NEUROARENA — CSS expliqué
+   Ce fichier est chargé par <link rel="stylesheet" href="style.css">.
+   Un commentaire commence par /* et se termine par le signe inverse.
+   Les commentaires ne changent pas l'apparence de la page.
+
+   Une règle suit cette forme : sélecteur { propriété: valeur; }
+   Exemples de sélecteurs :
+   body       : une balise HTML.
+   .choice    : un élément avec class="choice".
+   #quiz      : l'élément avec id="quiz".
+   A > B      : B doit être un enfant direct de A.
+   A + B      : B doit suivre immédiatement A.
+   A ~ B      : B doit suivre A dans le même parent.
+   ===================================================================== */
+
+/* 1. BASE COMMUNE À TOUS LES ÉLÉMENTS */
+* {
+    /* Les dimensions comprennent le padding et la bordure. */
+    box-sizing: border-box;
+    /* On essaie ces polices dans l'ordre, selon leur disponibilité. */
+    font-family: "Comic Sans MS", "Comic Sans", cursive;
+}
+
+html {
+    /* Les liens #principe, #test... font défiler la page progressivement. */
+    scroll-behavior: smooth;
+}
+
+/* 2. VARIABLES : LA PALETTE SPACE MARINE PAR DÉFAUT */
+body {
+    /* Une variable commence par --. On l'utilise avec var(--nom). */
+    --fond: #163e4b;
+    --bloc: #25839b;
+    --texte: #bdcc42;
+    --accent: #ac8ab3;
+    --bordure: #965d68;
+
+    background-color: var(--fond);
+    color: var(--texte);
+    font-size: 16px;
+    /* 1.4 = une hauteur de ligne égale à 1,4 fois la taille du texte. */
+    line-height: 1.4;
+    /* Le contenu ne dépasse pas 1100 pixels de largeur. */
+    max-width: 1100px;
+    /* 0 en haut/bas ; auto à gauche/droite pour centrer le contenu. */
+    margin: 0 auto;
+    /* Espace à l'intérieur du body. */
+    padding: 20px;
+}
+
+/* :has() vérifie si le body contient la case #neo-theme cochée.
+   On change uniquement les variables : les autres règles se recolorent.
+   Cette fonctionnalité demande un navigateur moderne. */
+body:has(#neo-theme:checked) {
+    --fond: #080808;
+    --bloc: #171717;
+    --texte: #f3f5f7;
+    --accent: #87cefa;
+    --bordure: #345b80;
+}
+
+/* 3. LE BOUTON DE CHANGEMENT DE THÈME */
+.neo-toggle {
+    /* On cache visuellement la case, tout en la gardant accessible
+       au clavier. Ne pas utiliser display:none pour cet élément. */
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+.neo-button {
+    /* Le label lié à la case par for="neo-theme" devient le bouton. */
+    display: block;
+    /* La largeur suit le texte, au lieu de remplir toute la ligne. */
+    width: fit-content;
+    max-width: 100%;
+    margin-bottom: 20px;
+    /* Deux valeurs : haut/bas puis gauche/droite. */
+    padding: 10px 18px;
+    background-color: var(--accent);
+    color: var(--fond);
+    /* Épaisseur, style de ligne, couleur. */
+    border: 3px solid var(--bordure);
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* 4. LE NOM CHANGE AUSSI AVEC LE THÈME */
+.name-neo {
+    /* La version Neo est invisible au départ. */
+    display: none;
+}
+
+body:has(#neo-theme:checked) .name-space {
+    display: none;
+}
+
+body:has(#neo-theme:checked) .name-neo {
+    /* inline permet au nom de rester dans la ligne de texte. */
+    display: inline;
+}
+
+/* 5. LES IMAGES DU LOGO */
+body > img {
+    width: 200px;
+    /* Évite que l'image déborde sur un très petit écran. */
+    max-width: 100%;
+    /* Conserve ses proportions malgré height="200" dans le HTML. */
+    height: auto;
+}
+
+/* [src="..."] cible les images ayant exactement cette source.
+   L'image bleue remplace visuellement le logo Space Marine en thème Neo.
+   Les chemins sont relatifs à ce fichier CSS. Sur un serveur Linux,
+   Logo.png et logo.png sont différents : ici le fichier est logo.png. */
+body:has(#neo-theme:checked) img[src="logo-space-marine.png"] {
+    content: url("logo.png");
+}
+
+/* Le premier paragraphe direct du body contient le nom du site. */
+body > p:first-of-type {
+    background-color: var(--bordure);
+    color: var(--texte);
+    padding: 20px;
+    font-size: 30px;
+    font-weight: bold;
+    border-bottom: 5px solid var(--accent);
+    overflow-wrap: anywhere;
+}
+
+/* 6. TITRES ET TEXTES */
+h1 {
+    font-size: 46px;
+    /* Les trois lignes du grand titre restent proches. */
+    line-height: 1.15;
+    margin: 18px 0;
+}
+
+body > h1 {
+    background-color: var(--bloc);
+    padding: 20px;
+    border: 5px solid var(--accent);
+}
+
+h2 {
+    background-color: var(--bordure);
+    padding: 10px;
+    font-size: 29px;
+    line-height: 1.3;
+    border-bottom: 4px solid var(--accent);
+}
+
+h3 {
+    color: var(--texte);
+    font-size: 20px;
+    line-height: 1.4;
+}
+
+p {
+    /* Le texte suit la palette active. */
+    color: var(--texte);
+}
+
+/* 7. LIENS VERS LES SECTIONS */
+a {
+    color: var(--accent);
+    text-decoration: underline;
+}
+
+body > a {
+    /* Permet aux liens de se placer côte à côte avec padding/bordure. */
+    display: inline-block;
+    background-color: var(--bordure);
+    color: var(--texte);
+    padding: 10px;
+    margin: 5px 0;
+    border: 2px solid var(--texte);
+}
+
+/* Le premier lien est « Commencer la découverte ». */
+body > a:first-of-type {
+    background-color: var(--accent);
+    color: var(--fond);
+    /* outset crée un effet de relief sur la bordure. */
+    border: 4px outset var(--bordure);
+    padding: 10px 16px;
+    font-weight: bold;
+}
+
+/* 8. SECTIONS : COMPRENDRE, APPRENDRE, EXPLORER, SE TESTER */
+body > section {
+    background-color: var(--fond);
+    border: 3px solid var(--bloc);
+    /* margin = espace extérieur ; padding = espace intérieur. */
+    margin: 20px 0;
+    padding: 20px 12px;
+}
+
+/* 9. LES ÉTAPES : UN TITRE ET SON PARAGRAPHE FORMENT UN BLOC */
+#apprendre > h3 {
+    background-color: var(--bloc);
+    padding: 18px;
+    margin-bottom: 0;
+    border: 4px solid var(--accent);
+    /* Pas de séparation entre le titre et le texte qui suit. */
+    border-bottom: 0;
+}
+
+#apprendre > h3 + p {
+    /* Le + cible le paragraphe immédiatement après un h3. */
+    background-color: var(--bloc);
+    padding: 18px;
+    margin-top: 0;
+    border: 4px solid var(--accent);
+    border-top: 0;
+}
+
+/* 10. LES TROIS MÉTHODES D'APPRENTISSAGE */
+#explorer > h3 {
+    background-color: var(--bordure);
+    padding: 12px;
+    border-left: 10px solid var(--texte);
+}
+
+#explorer small {
+    /* Les exemples sont plus petits grâce à la balise small en HTML. */
+    color: var(--accent);
+}
+
+/* 11. QUIZ : LA SECTION ET LE FORMULAIRE */
+#test {
+    background-color: var(--bloc);
+    border: 5px solid var(--bordure);
+}
+
+#quiz {
+    background-color: var(--fond);
+    padding: 20px;
+    border: 4px solid var(--accent);
+}
+
+.choice {
+    margin: 12px 0;
+    padding: 10px;
+    border: 1px solid var(--bordure);
+}
+
+.choice label {
+    /* Cliquer sur le label coche le bouton relié par for/id en HTML. */
+    cursor: pointer;
+}
+
+.choice input {
+    /* Colore les boutons radio natifs du navigateur. */
+    accent-color: var(--accent);
+    cursor: pointer;
+}
+
+/* 12. EXPLICATIONS : VISIBLES SEULEMENT POUR LE CHOIX COCHÉ */
+.answer {
+    /* Cache l'élément ET l'espace qu'il occuperait. */
+    display: none;
+    padding: 10px;
+    color: var(--accent);
+}
+
+.choice input:checked ~ .answer {
+    /* ~ trouve l'explication après l'input dans le même .choice.
+       Chaque réponse doit donc avoir son propre bloc .choice. */
+    display: block;
+}
+
+.choice input:checked + label {
+    /* + trouve uniquement le label immédiatement après l'input. */
+    color: var(--accent);
+    font-weight: bold;
+}
+
+/* 13. BOUTON RECOMMENCER */
+#quiz > button {
+    background-color: var(--accent);
+    color: var(--fond);
+    border: 4px outset var(--bordure);
+    padding: 10px 16px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#quiz > button:hover {
+    /* :hover s'applique quand la souris passe sur le bouton. */
+    background-color: var(--texte);
+}
+
+/* C'est type="reset" dans le HTML qui décoche les réponses.
+   Le CSS règle l'apparence ; il ne calcule pas de score. */
+
+/* 14. NAVIGATION AVEC TAB : RENDRE LE FOCUS VISIBLE */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+    /* Un outline ne change pas la taille de l'élément. */
+    outline: 3px solid var(--accent);
+    outline-offset: 3px;
+}
+
+.neo-toggle:focus-visible + .neo-button {
+    /* La case est cachée : on dessine le focus sur son label visible. */
+    outline: 3px solid var(--texte);
+    outline-offset: 3px;
+}
+
+/* 15. TÉLÉPHONE : RÈGLES ACTIVES SI L'ÉCRAN FAIT AU PLUS 650 PX */
+@media (max-width: 650px) {
+    body {
+        padding: 12px;
+    }
+
+    h1 {
+        font-size: 34px;
+    }
+
+    h2 {
+        font-size: 25px;
+    }
+
+    #quiz {
+        padding: 12px;
+    }
+
+    body > img {
+        width: 150px;
+    }
+}
+
+/* Si la personne préfère limiter les animations, défilement immédiat. */
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+}
