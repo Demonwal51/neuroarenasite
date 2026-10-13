@@ -135,7 +135,7 @@ requestAnimationFrame(function () {
     }, 0);
 });
 
-/* Test de charge CPU : quatre Workers maximum, duree limitee a 15 s.
+/* Test de charge CPU : quatre Workers maximum, duree limitee a 2 min.
    Le bouton reste sur le thread principal et peut interrompre la charge. */
 let stressWorkers = [];
 let stressTimer = null;
@@ -148,7 +148,7 @@ function stopStress() {
     clearTimeout(stressTimer);
     stressTimer = null;
     if (stressStatus) stressStatus.textContent = "Test de charge arrêté.";
-    if (stressButton) stressButton.textContent = "Relancer la charge (15 s)";
+    if (stressButton) stressButton.textContent = "Relancer la charge (2 min)";
 }
 
 function startStress() {
@@ -171,11 +171,11 @@ function startStress() {
         });
     }
     const count = Math.min(4, Math.max(1, (navigator.hardwareConcurrency || 2) - 1));
-    stressStatus.textContent = "Charge CPU active : " + count + " calculs de fractales en parallèle pendant 15 secondes.";
+    stressStatus.textContent = "Charge CPU active : " + count + " calculs de fractales en parallèle pendant 2 minutes.";
     stressButton.textContent = "Arrêter la charge";
     const code = `
         onmessage = function () {
-            const deadline = performance.now() + 15000;
+            const deadline = performance.now() + 120000;
             let checksum = 0;
             // Mandelbrot : iterations complexes pour chaque point.
             while (performance.now() < deadline) {
@@ -212,10 +212,11 @@ function startStress() {
     } finally {
         URL.revokeObjectURL(url);
     }
-    stressTimer = setTimeout(stopStress, 15000);
+    stressTimer = setTimeout(stopStress, 120000);
 }
 // Interrompt la charge quand l'onglet passe en arriere-plan.
  document.addEventListener("visibilitychange", function () {
     if (document.hidden) stopStress();
 });
 window.addEventListener("pagehide", stopStress);
+
