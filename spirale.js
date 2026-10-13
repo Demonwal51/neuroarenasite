@@ -21,7 +21,7 @@ function startCalculation() {
     startStress();
     if (worker) worker.terminate();
     const thisRun = ++generation;
-    statusText.textContent = "Calcul de 30 000 décimales…";
+    statusText.textContent = "Calcul de 1 000 000 décimales…";
     digitsOutput.textContent = "";
     const size = Math.min(900, Math.max(280, canvas.clientWidth || 500));
     const scale = Math.min(window.devicePixelRatio || 1, 2);
@@ -40,7 +40,7 @@ function startCalculation() {
         onmessage = function (event) {
             const { width, height } = event.data;
             const started = performance.now();
-            const places = 30000;
+            const places = 1000000;
             const base = 10n ** BigInt(places);
             const n = 5n * base * base;
             let x = 3n * base;
@@ -48,17 +48,17 @@ function startCalculation() {
                 const next = (x + n / x) / 2n;
                 if (next >= x) break;
                 x = next;
-                if (performance.now() - started > 10000) {
+                if (performance.now() - started > 120000) {
                     postMessage({ error: "Limite de calcul atteinte. Relance avec le bouton de thème." });
                     return;
                 }
             }
-            // 30 000 decimales tronquees calculees avec BigInt.
+            // 1 000 000 decimales tronquees calculees avec BigInt.
             const raw = ((base + x) / 2n).toString();
             const value = raw[0] + "," + raw.slice(1);
             postMessage({ value });
             // Le trace utilise des nombres flottants : sa precision est
-            // adaptee aux pixels, et non aux 30 000 decimales de phi.
+            // adaptee aux pixels, et non aux 1 000 000 decimales de phi.
             const phi = Number(raw[0] + "." + raw.slice(1, 17));
             const growth = 2 * Math.log(phi) / Math.PI;
             const total = 24000;
@@ -111,7 +111,7 @@ function startCalculation() {
                 + result.count.toLocaleString("fr-FR") + " points / "
                 + result.total.toLocaleString("fr-FR");
             if (result.done) {
-                statusText.textContent = "Terminé : 30 000 décimales et "
+                statusText.textContent = "Terminé : 1 000 000 décimales et "
                     + result.total.toLocaleString("fr-FR") + " points calculés en "
                     + result.seconds.toFixed(2) + " s. Dessin limité à la précision de l’écran.";
                 worker.terminate(); worker = null;
@@ -265,4 +265,5 @@ document.addEventListener("visibilitychange", function () {
     if (document.hidden) stopStress();
 });
 window.addEventListener("pagehide", stopStress);
+
 
