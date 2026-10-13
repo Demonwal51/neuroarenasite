@@ -373,3 +373,10 @@ input:focus-visible {
     .logo-et-phi img { width: 150px; }
 }
 
+
+/* La visualisation reste a cote du logo si l'espace le permet. */
+.visualisation-or { flex: 1 1 320px; min-width: 0; border: 2px solid var(--accent); padding: 16px; }
+#spirale-or { display: block; width: 100%; height: auto; }
+#etat-calcul { font-size: 14px; }
+#decimales-or { max-height: 180px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 12px; }
+summary { cursor: pointer; color: var(--accent); }

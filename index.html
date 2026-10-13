@@ -29,10 +29,21 @@ La case est hors du formulaire : le bouton reset du quiz ne change pas le thème
     
         <!-- Image locale : src = chemin, alt = description, width/height = dimensions.
 Le CSS affiche logo.png à la place en thème Neo. Les deux fichiers restent conservés. -->
-<!-- Le navigateur calcule phi ; aucune valeur numerique n'est inscrite ici. -->
+
+<!-- Le bouton de theme est deja situe au-dessus de cette zone.
+     Le canvas est dessine par spirale.js, execute dans le navigateur. -->
 <div class="logo-et-phi">
-<img src="logo-space-marine.png" alt="Logo de NeuroArena" width="200" height="200">
-<div class="nombre-or"><b>Nombre d’or</b><br>φ ≈ <output class="valeur-phi">Calcul en cours…</output><br><small>φ = (1 + √5) / 2</small><noscript><br>Active JavaScript pour effectuer le calcul.</noscript></div>
+    <img src="logo-space-marine.png" alt="Logo de NeuroArena" width="200" height="200">
+    <section class="visualisation-or" aria-label="Spirale du nombre d’or">
+        <h3>La spirale du nombre d’or</h3>
+        <p id="etat-calcul" role="status">Prêt à calculer après l’affichage du bouton.</p>
+        <canvas id="spirale-or" width="700" height="490" role="img" aria-label="Spirale logarithmique dorée calculée dans le navigateur"></canvas>
+        <p>Son rayon est multiplié par φ à chaque quart de tour.</p>
+        <details><summary>Voir les 30 000 décimales calculées</summary>
+            <pre id="decimales-or"></pre>
+        </details>
+        <noscript>Active JavaScript pour calculer et dessiner la spirale.</noscript>
+    </section>
 </div>
         <p><b><!-- Nom visible en thème Space Marine, caché en thème Neo par le CSS. -->
 <span class="name-space">NeuroArena</span><!-- Nom visible seulement en thème Neo grâce au CSS. -->
@@ -49,11 +60,7 @@ Le CSS affiche logo.png à la place en thème Neo. Les deux fichiers restent con
 <a href="#principe">Commencer la découverte ↓</a><br>
         <!-- Image locale : src = chemin, alt = description, width/height = dimensions.
 Le CSS affiche logo.png à la place en thème Neo. Les deux fichiers restent conservés. -->
-<!-- Le navigateur calcule phi ; aucune valeur numerique n'est inscrite ici. -->
-<div class="logo-et-phi">
-<img src="logo-space-marine.png" alt="Logo de NeuroArena" width="200" height="200">
-<div class="nombre-or"><b>Nombre d’or</b><br>φ ≈ <output class="valeur-phi">Calcul en cours…</output><br><small>φ = (1 + √5) / 2</small><noscript><br>Active JavaScript pour effectuer le calcul.</noscript></div>
-</div><br>
+<img src="logo-space-marine.png" alt="Logo de NeuroArena" width="200" height="200"><br>
         <!-- NAVIGATION : chaque #nom doit correspondre exactement à un id plus bas. -->
 <a href="#principe">01 comprendre</a>
         <a href="#apprendre">02 apprendre</a>
@@ -236,17 +243,9 @@ Aucune réponse n’est cochée au départ : le bouton les décoche toutes, sans
 <button type="reset">Recommencer le quiz ↺</button>
             </form>
         </section>
-    <!-- Math.sqrt(5) calcule la racine carree de 5 dans le navigateur.
-     Le resultat est arrondi a 10 decimales uniquement pour l'affichage. -->
-<script>
-    const nombreOr = (1 + Math.sqrt(5)) / 2;
-    document.querySelectorAll(".valeur-phi").forEach(function (element) {
-        element.textContent = nombreOr.toLocaleString("fr-FR", {
-            minimumFractionDigits: 10,
-            maximumFractionDigits: 10
-        });
-    });
-</script>
+    
+<!-- defer attend que le HTML soit lu avant de lancer le script. -->
+<script src="spirale.js" defer></script>
 </body>
 </html>
 
